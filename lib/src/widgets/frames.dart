@@ -13,6 +13,10 @@ class Frames extends StatefulWidget {
   /// Child widgets (CardNumber, ExpiryDate, Cvv, SubmitButton, etc.)
   final Widget child;
 
+  /// Controller to access Frames methods imperatively (optional)
+  /// Use this to submit the card programmatically with your own button
+  final FramesController? controller;
+
   /// Called when a field's validation status changes
   final void Function(FieldValidation validation, String fieldType)?
   frameValidationChanged;
@@ -36,6 +40,7 @@ class Frames extends StatefulWidget {
     super.key,
     required this.config,
     required this.child,
+    this.controller,
     this.frameValidationChanged,
     this.paymentMethodChanged,
     this.cardValidationChanged,
@@ -48,10 +53,48 @@ class Frames extends StatefulWidget {
   State<Frames> createState() => FramesWidgetState();
 }
 
+/// Controller for Frames widget to access methods imperatively
+class FramesController {
+  FramesWidgetState? _state;
+
+  void _attach(FramesWidgetState state) {
+    _state = state;
+  }
+
+  void _detach() {
+    _state = null;
+  }
+
+  /// Submit card for tokenization
+  /// Returns a Future that completes when tokenization finishes
+  Future<void> submitCard() async {
+    if (_state == null) {
+      throw StateError(
+        'FramesController is not attached to any Frames widget. '
+        'Make sure to pass the controller to the Frames widget.',
+      );
+    }
+    return _state!.submitCard();
+  }
+
+  /// Check if the card is currently valid
+  bool get isValid => _state?.isValid ?? false;
+
+  /// Check if tokenization is in progress
+  bool get isTokenizing => _state?.isTokenizing ?? false;
+}
+
 class FramesWidgetState extends State<Frames> {
   late FramesState _framesState;
   late CheckoutApiService _apiService;
   bool _isTokenizing = false;
+  FramesController? _controller;
+
+  /// Get validation state
+  bool get isValid => _framesState.validationState.isValid;
+
+  /// Get tokenization state
+  bool get isTokenizing => _isTokenizing;
 
   @override
   void initState() {
@@ -69,6 +112,10 @@ class FramesWidgetState extends State<Frames> {
       enableLogging: widget.config.enableLogging,
     );
 
+    // Attach controller if provided
+    _controller = widget.controller;
+    _controller?._attach(this);
+
     // Log frames initialization
     _apiService.logger.logFramesInit();
 
@@ -80,6 +127,7 @@ class FramesWidgetState extends State<Frames> {
 
   @override
   void dispose() {
+    _controller?._detach();
     _framesState.dispose();
     super.dispose();
   }

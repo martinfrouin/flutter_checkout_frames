@@ -6,7 +6,7 @@ export 'src/models/card_token.dart';
 export 'src/models/card_validation.dart';
 
 // Widgets
-export 'src/widgets/frames.dart';
+export 'src/widgets/frames.dart' show Frames, FramesController;
 export 'src/widgets/card_number_field.dart';
 export 'src/widgets/expiry_date_field.dart';
 export 'src/widgets/cvv_field.dart';

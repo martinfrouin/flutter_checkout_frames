@@ -31,11 +31,7 @@ class Cardholder {
   /// The cardholder billing address
   final BillingAddress? billingAddress;
 
-  const Cardholder({
-    this.name,
-    this.phone,
-    this.billingAddress,
-  });
+  const Cardholder({this.name, this.phone, this.billingAddress});
 
   Map<String, dynamic> toJson() {
     return {
