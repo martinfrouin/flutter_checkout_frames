@@ -6,12 +6,16 @@ class FramesConfig {
   /// Enable debug mode
   final bool debug;
 
+  /// Enable logging to Checkout.com CloudEvents
+  final bool enableLogging;
+
   /// Cardholder information
   final Cardholder? cardholder;
 
   const FramesConfig({
     required this.publicKey,
     this.debug = false,
+    this.enableLogging = true,
     this.cardholder,
   });
 }

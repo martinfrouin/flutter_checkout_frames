@@ -13,6 +13,12 @@
 - Mode debug avec logs détaillés
 - Formatage automatique du numéro de carte et de la date d'expiration
 - Support des environnements sandbox et production
+- **Logging automatique vers Checkout.com CloudEvents**
+  - Événements d'initialisation (frames-init, frames-ready)
+  - Événements de validation
+  - Événements de tokenisation (tentative, succès, échec)
+  - Événements de changement de méthode de paiement
+  - Événements de lookup BIN
 - Callbacks pour tous les événements (validation, tokenisation, etc.)
 - Documentation complète en français
 - Application d'exemple avec interface moderne

@@ -12,5 +12,8 @@ export 'src/widgets/expiry_date_field.dart';
 export 'src/widgets/cvv_field.dart';
 export 'src/widgets/submit_button.dart';
 
-// Utils (optional, for advanced usage)
+// Services (for advanced usage)
+export 'src/services/frames_logger.dart';
+
+// Utils (for advanced usage)
 export 'src/utils/card_validator.dart';

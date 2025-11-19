@@ -151,7 +151,17 @@ void main() {
 
       expect(config.publicKey, 'pk_sbox_test');
       expect(config.debug, true);
+      expect(config.enableLogging, true); // Default value
       expect(config.cardholder, null);
+    });
+
+    test('creates config with logging disabled', () {
+      final config = FramesConfig(
+        publicKey: 'pk_sbox_test',
+        enableLogging: false,
+      );
+
+      expect(config.enableLogging, false);
     });
 
     test('creates config with cardholder info', () {

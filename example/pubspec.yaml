@@ -1,6 +1,7 @@
 name: checkout_frames_example
 description: Example app for checkout_frames Flutter package.
 publish_to: 'none'
+version: 0.0.1
 
 environment:
   sdk: ^3.9.2

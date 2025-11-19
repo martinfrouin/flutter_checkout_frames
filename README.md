@@ -57,7 +57,7 @@ class PaymentPage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Frames(
           config: FramesConfig(
-            publicKey: 'pk_sbox_eo3yb3urja2ozf6ycgn5kuy7ke4',
+            publicKey: 'PUBLIC_KEY',
             debug: true,
           ),
           cardTokenized: (token) {
@@ -241,7 +241,8 @@ Bouton de soumission pour déclencher la tokenisation.
 ```dart
 FramesConfig(
   publicKey: 'pk_sbox_...', // Votre clé publique Checkout.com
-  debug: true, // Mode debug (affiche les logs)
+  debug: true, // Mode debug (affiche les logs en console)
+  enableLogging: true, // Envoie des événements à Checkout.com CloudEvents
   cardholder: Cardholder(
     name: 'John Doe',
     phone: '+33612345678',
@@ -296,7 +297,39 @@ Utilisez n'importe quelle date d'expiration future (ex: 12/25) et n'importe quel
 - **Sandbox** : Clés commençant par `pk_sbox_` ou `pk_test_`
 - **Production** : Clés commençant par `pk_`
 
-L'URL de l'API est automatiquement sélectionnée en fonction de votre clé publique.
+L'URL de l'API et du logging est automatiquement sélectionnée en fonction de votre clé publique.
+
+### URLs utilisées
+
+**Production** :
+- API : `https://api.checkout.com`
+- Logging : `https://cloudevents.integration.checkout.com/logging`
+
+**Sandbox** :
+- API : `https://api.sandbox.checkout.com`
+- Logging : `https://cloudevents.integration.sandbox.checkout.com/logging`
+
+## 📊 Logging et monitoring
+
+Le SDK envoie automatiquement des événements à Checkout.com CloudEvents pour le monitoring et l'analyse. Ces événements incluent :
+
+- Initialisation de Frames
+- Validation des champs
+- Tentatives de tokenisation
+- Succès/échecs de tokenisation
+- Changements de méthode de paiement
+- Lookups BIN
+
+Vous pouvez désactiver le logging en passant `enableLogging: false` dans `FramesConfig` :
+
+```dart
+FramesConfig(
+  publicKey: 'pk_sbox_...',
+  enableLogging: false, // Désactive l'envoi d'événements
+)
+```
+
+> Note : Le logging n'affecte pas le flux principal et échoue silencieusement en cas d'erreur.
 
 ## 📖 Ressources
 
