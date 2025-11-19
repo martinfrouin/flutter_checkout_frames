@@ -54,10 +54,40 @@ class Frames extends StatefulWidget {
 }
 
 /// Controller for Frames widget to access methods imperatively
+///
+/// This controller allows you to programmatically submit the card for tokenization
+/// and check validation state from anywhere in your widget tree.
+///
+/// Example:
+/// ```dart
+/// final controller = FramesController();
+///
+/// // Later, in your build method:
+/// Frames(
+///   controller: controller,
+///   config: FramesConfig(publicKey: 'pk_...'),
+///   child: YourFormFields(),
+/// )
+///
+/// // And in your custom button:
+/// ElevatedButton(
+///   onPressed: () => controller.submitCard(),
+///   child: Text('Pay'),
+/// )
+///
+/// // Don't forget to dispose when done:
+/// @override
+/// void dispose() {
+///   controller.dispose();
+///   super.dispose();
+/// }
+/// ```
 class FramesController {
   FramesWidgetState? _state;
+  bool _isDisposed = false;
 
   void _attach(FramesWidgetState state) {
+    _assertNotDisposed();
     _state = state;
   }
 
@@ -65,9 +95,19 @@ class FramesController {
     _state = null;
   }
 
+  void _assertNotDisposed() {
+    if (_isDisposed) {
+      throw StateError(
+        'A FramesController was used after being disposed. '
+        'Once you have called dispose() on a FramesController, it can no longer be used.',
+      );
+    }
+  }
+
   /// Submit card for tokenization
   /// Returns a Future that completes when tokenization finishes
   Future<void> submitCard() async {
+    _assertNotDisposed();
     if (_state == null) {
       throw StateError(
         'FramesController is not attached to any Frames widget. '
@@ -78,10 +118,25 @@ class FramesController {
   }
 
   /// Check if the card is currently valid
-  bool get isValid => _state?.isValid ?? false;
+  bool get isValid {
+    _assertNotDisposed();
+    return _state?.isValid ?? false;
+  }
 
   /// Check if tokenization is in progress
-  bool get isTokenizing => _state?.isTokenizing ?? false;
+  bool get isTokenizing {
+    _assertNotDisposed();
+    return _state?.isTokenizing ?? false;
+  }
+
+  /// Dispose the controller
+  ///
+  /// Call this when the controller is no longer needed to free up resources.
+  /// After calling dispose(), the controller can no longer be used.
+  void dispose() {
+    _state = null;
+    _isDisposed = true;
+  }
 }
 
 class FramesWidgetState extends State<Frames> {

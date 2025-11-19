@@ -16,6 +16,13 @@ class _CustomButtonExampleState extends State<CustomButtonExample> {
   String? _errorMessage;
 
   @override
+  void dispose() {
+    // Dispose the controller when the widget is disposed
+    _framesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF000000),
