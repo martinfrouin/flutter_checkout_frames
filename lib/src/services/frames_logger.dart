@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class FramesLogger {
   static const String liveBaseUrl = 'https://api.checkout.com';
   static const String sandboxBaseUrl = 'https://api.sandbox.checkout.com';
-  
+
   static const String liveLoggerUrl =
       'https://cloudevents.integration.checkout.com/logging';
   static const String sandboxLoggerUrl =
@@ -61,23 +61,25 @@ class FramesLogger {
         print('[Frames Logger] Data: ${jsonEncode(event)}');
       }
 
-      final response = await http.post(
-        Uri.parse(_loggerUrl),
-        headers: {
-          'Content-Type': 'application/cloudevents+json',
-          'Authorization': publicKey,
-        },
-        body: jsonEncode(event),
-      ).timeout(
-        const Duration(seconds: 5),
-        onTimeout: () {
-          if (debug) {
-            print('[Frames Logger] Timeout logging event: $eventType');
-          }
-          // Return a dummy response on timeout
-          return http.Response('', 408);
-        },
-      );
+      final response = await http
+          .post(
+            Uri.parse(_loggerUrl),
+            headers: {
+              'Content-Type': 'application/cloudevents+json',
+              'Authorization': publicKey,
+            },
+            body: jsonEncode(event),
+          )
+          .timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              if (debug) {
+                print('[Frames Logger] Timeout logging event: $eventType');
+              }
+              // Return a dummy response on timeout
+              return http.Response('', 408);
+            },
+          );
 
       if (debug) {
         print('[Frames Logger] Response status: ${response.statusCode}');
@@ -109,9 +111,7 @@ class FramesLogger {
   Future<void> logTokenizationAttempt() async {
     await logEvent(
       eventType: 'tokenization-attempt',
-      data: {
-        'timestamp': DateTime.now().toIso8601String(),
-      },
+      data: {'timestamp': DateTime.now().toIso8601String()},
     );
   }
 
@@ -146,28 +146,18 @@ class FramesLogger {
   }
 
   /// Log payment method change
-  Future<void> logPaymentMethodChange({
-    required String scheme,
-  }) async {
+  Future<void> logPaymentMethodChange({required String scheme}) async {
     await logEvent(
       eventType: 'payment-method-changed',
-      data: {
-        'scheme': scheme,
-        'timestamp': DateTime.now().toIso8601String(),
-      },
+      data: {'scheme': scheme, 'timestamp': DateTime.now().toIso8601String()},
     );
   }
 
   /// Log BIN lookup
-  Future<void> logBinLookup({
-    required String bin,
-  }) async {
+  Future<void> logBinLookup({required String bin}) async {
     await logEvent(
       eventType: 'bin-lookup',
-      data: {
-        'bin': bin,
-        'timestamp': DateTime.now().toIso8601String(),
-      },
+      data: {'bin': bin, 'timestamp': DateTime.now().toIso8601String()},
     );
   }
 
@@ -193,4 +183,3 @@ class FramesLogger {
     );
   }
 }
-

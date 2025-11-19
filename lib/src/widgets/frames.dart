@@ -68,10 +68,10 @@ class FramesWidgetState extends State<Frames> {
       debug: widget.config.debug,
       enableLogging: widget.config.enableLogging,
     );
-    
+
     // Log frames initialization
     _apiService.logger.logFramesInit();
-    
+
     // Log frames ready after next frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _apiService.logger.logFramesReady();

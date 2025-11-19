@@ -15,10 +15,10 @@ class CheckoutApiService {
     this.debug = false,
     bool enableLogging = true,
   }) : logger = FramesLogger(
-          publicKey: publicKey,
-          debug: debug,
-          enableLogging: enableLogging,
-        );
+         publicKey: publicKey,
+         debug: debug,
+         enableLogging: enableLogging,
+       );
 
   /// Get the appropriate base URL based on the public key
   String get _apiUrl => logger.baseUrl;
@@ -69,24 +69,24 @@ class CheckoutApiService {
       if (response.statusCode == 201) {
         final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
         final token = CardTokenResponse.fromJson(jsonResponse);
-        
+
         // Log success
         await logger.logTokenizationSuccess(
           tokenType: token.type,
           scheme: token.scheme,
         );
-        
+
         return token;
       } else {
         final errorResponse = jsonDecode(response.body) as Map<String, dynamic>;
         final failure = CardTokenizationFailure.fromJson(errorResponse);
-        
+
         // Log failure
         await logger.logTokenizationFailure(
           errorType: failure.errorType,
           errorCodes: failure.errorCodes,
         );
-        
+
         throw failure;
       }
     } catch (e) {
@@ -103,7 +103,7 @@ class CheckoutApiService {
         errorCodes: ['network_error'],
         message: e.toString(),
       );
-      
+
       // Log failure
       await logger.logTokenizationFailure(
         errorType: failure.errorType,
