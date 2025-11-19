@@ -55,7 +55,7 @@ class _PaymentPageState extends State<PaymentPage> {
             const SizedBox(height: 30),
             Frames(
               config: FramesConfig(
-                publicKey: '',
+                publicKey: "PUBLIC_KEY",
                 debug: true,
                 cardholder: const Cardholder(
                   name: 'John Doe',

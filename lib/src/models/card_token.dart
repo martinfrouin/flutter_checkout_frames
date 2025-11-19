@@ -53,8 +53,8 @@ class CardTokenResponse {
     return CardTokenResponse(
       token: json['token'] as String,
       type: json['type'] as String,
-      expiryMonth: json['expiry_month'] as String,
-      expiryYear: json['expiry_year'] as String,
+      expiryMonth: json['expiry_month'].toString(),
+      expiryYear: json['expiry_year'].toString(),
       scheme: json['scheme'] as String?,
       last4: json['last4'] as String?,
       bin: json['bin'] as String?,
